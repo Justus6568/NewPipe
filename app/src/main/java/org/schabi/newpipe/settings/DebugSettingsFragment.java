@@ -9,7 +9,6 @@ import org.schabi.newpipe.R;
 import org.schabi.newpipe.error.ErrorInfo;
 import org.schabi.newpipe.error.ErrorUtil;
 import org.schabi.newpipe.error.UserAction;
-import org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper;
 import org.schabi.newpipe.local.feed.notifications.NotificationWorker;
 import org.schabi.newpipe.util.PicassoHelper;
 
@@ -36,8 +35,6 @@ public class DebugSettingsFragment extends BasePreferenceFragment {
                 findPreference(getString(R.string.show_error_snackbar_key));
         final Preference createErrorNotificationPreference =
                 findPreference(getString(R.string.create_error_notification_key));
-        final Preference visitorDataPreference =
-                findPreference(getString(R.string.youtube_visitor_data));
 
         assert allowHeapDumpingPreference != null;
         assert showMemoryLeaksPreference != null;
@@ -46,7 +43,6 @@ public class DebugSettingsFragment extends BasePreferenceFragment {
         assert crashTheAppPreference != null;
         assert showErrorSnackbarPreference != null;
         assert createErrorNotificationPreference != null;
-        assert visitorDataPreference != null;
 
         final Optional<DebugSettingsBVDLeakCanaryAPI> optBVLeakCanary = getBVDLeakCanary();
 
@@ -88,11 +84,6 @@ public class DebugSettingsFragment extends BasePreferenceFragment {
         createErrorNotificationPreference.setOnPreferenceClickListener(preference -> {
             ErrorUtil.createNotification(requireContext(),
                     new ErrorInfo(new RuntimeException(DUMMY), UserAction.UI_ERROR, DUMMY));
-            return true;
-        });
-
-        visitorDataPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            YoutubeParsingHelper.setVisitorData((String) newValue);
             return true;
         });
     }

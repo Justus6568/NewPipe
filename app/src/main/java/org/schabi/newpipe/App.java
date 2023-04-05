@@ -17,7 +17,6 @@ import org.acra.config.CoreConfigurationBuilder;
 import org.schabi.newpipe.error.ReCaptchaActivity;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.downloader.Downloader;
-import org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper;
 import org.schabi.newpipe.ktx.ExceptionUtils;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.util.Localization;
@@ -105,11 +104,6 @@ public class App extends Application {
                 prefs.getBoolean(getString(R.string.download_thumbnail_key), true));
         PicassoHelper.setIndicatorsEnabled(MainActivity.DEBUG
                 && prefs.getBoolean(getString(R.string.show_image_indicators_key), false));
-
-        if (MainActivity.DEBUG) {
-            YoutubeParsingHelper.setVisitorData(
-                    prefs.getString(getString(R.string.youtube_visitor_data), null));
-        }
 
         configureRxJavaErrorHandler();
     }
