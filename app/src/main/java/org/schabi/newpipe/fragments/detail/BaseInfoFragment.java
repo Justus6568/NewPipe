@@ -56,7 +56,6 @@ public abstract class BaseInfoFragment extends BaseFragment {
 
     /**
      * Get the description to display.
-     *
      * @return description object
      */
     @Nullable
@@ -64,7 +63,6 @@ public abstract class BaseInfoFragment extends BaseFragment {
 
     /**
      * Get the streaming service. Used for generating description links.
-     *
      * @return streaming service
      */
     @Nullable
@@ -72,14 +70,12 @@ public abstract class BaseInfoFragment extends BaseFragment {
 
     /**
      * Get the streaming service ID. Used for tag links.
-     *
      * @return service ID
      */
     protected abstract int getServiceId();
 
     /**
      * Get the URL of the described video. Used for generating description links.
-     *
      * @return stream URL
      */
     @Nullable
@@ -87,7 +83,6 @@ public abstract class BaseInfoFragment extends BaseFragment {
 
     /**
      * Get the list of tags to display below the description.
-     *
      * @return tag list
      */
     @Nullable
@@ -95,9 +90,8 @@ public abstract class BaseInfoFragment extends BaseFragment {
 
     /**
      * Add additional metadata to display.
-     *
      * @param inflater LayoutInflater
-     * @param layout   detailMetadataLayout
+     * @param layout detailMetadataLayout
      */
     protected abstract void setupMetadata(LayoutInflater inflater, LinearLayout layout);
 
@@ -150,11 +144,11 @@ public abstract class BaseInfoFragment extends BaseFragment {
     }
 
     protected void addMetadataItem(final LayoutInflater inflater,
-                                   final LinearLayout layout,
-                                   final boolean linkifyContent,
-                                   @StringRes final int type,
-                                   @Nullable final String content) {
-        if (content == null || isBlank(content)) {
+                                 final LinearLayout layout,
+                                 final boolean linkifyContent,
+                                 @StringRes final int type,
+                                 @Nullable final String content) {
+        if (isBlank(content)) {
             return;
         }
 
