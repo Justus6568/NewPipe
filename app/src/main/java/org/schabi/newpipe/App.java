@@ -89,6 +89,7 @@ public class App extends Application {
         NewPipe.init(getDownloader(),
             Localization.getPreferredLocalization(this),
             Localization.getPreferredContentCountry(this));
+
         Localization.initPrettyTime(Localization.resolvePrettyTime(getApplicationContext()));
 
         StateSaver.init(this);
