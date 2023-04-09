@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 import androidx.core.math.MathUtils;
@@ -21,6 +22,8 @@ import org.ocpsoft.prettytime.units.Decade;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.localization.ContentCountry;
+import org.schabi.newpipe.extractor.stream.AudioStream;
+import org.schabi.newpipe.extractor.stream.AudioTrackType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -259,6 +262,49 @@ public final class Localization {
         } else {
             return resources.getQuantityString(R.plurals.seconds, seconds, seconds);
         }
+    }
+
+    /**
+     * Get the localized name of an audio track.
+     * <p>Example:</p>
+     * <p>English (original)</p>
+     * <p>English (descriptive)</p>
+     * <p>Spanish (dubbed)</p>
+     *
+     * @param context used to get app language
+     * @param track a {@link AudioStream} of the track
+     * @return localized track name
+     */
+    public static String audioTrackName(final Context context, final AudioStream track) {
+        final String name;
+        if (track.getAudioLocale() != null) {
+            name = track.getAudioLocale().getDisplayLanguage(getAppLocale(context));
+        } else if (track.getAudioTrackName() != null) {
+            name = track.getAudioTrackName();
+        } else {
+            name = context.getString(R.string.unknown_audio_track);
+        }
+
+        if (track.getAudioTrackType() != null) {
+            final String trackType = audioTrackType(context, track.getAudioTrackType());
+            if (trackType != null) {
+                return context.getString(R.string.audio_track_name, name, trackType);
+            }
+        }
+        return name;
+    }
+
+    @Nullable
+    private static String audioTrackType(final Context context, final AudioTrackType trackType) {
+        switch (trackType) {
+            case ORIGINAL:
+                return context.getString(R.string.audio_track_type_original);
+            case DUBBED:
+                return context.getString(R.string.audio_track_type_dubbed);
+            case DESCRIPTIVE:
+                return context.getString(R.string.audio_track_type_descriptive);
+        }
+        return null;
     }
 
     /*//////////////////////////////////////////////////////////////////////////
