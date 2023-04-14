@@ -277,10 +277,9 @@ public class ChannelFragment extends BaseStateFragment<ChannelInfo>
                 }, onError));
     }
 
-    private Function<Object, Object> mapOnSubscribe(final SubscriptionEntity subscription,
-                                                    final ChannelInfo info) {
+    private Function<Object, Object> mapOnSubscribe(final SubscriptionEntity subscription) {
         return (@NonNull Object o) -> {
-            subscriptionManager.insertSubscription(subscription, info);
+            subscriptionManager.insertSubscription(subscription);
             return o;
         };
     }
@@ -355,7 +354,7 @@ public class ChannelFragment extends BaseStateFragment<ChannelInfo>
                         info.getSubscriberCount());
                 channelSubscription = null;
                 updateNotifyButton(null);
-                subscribeButtonMonitor = monitorSubscribeButton(mapOnSubscribe(channel, info));
+                subscribeButtonMonitor = monitorSubscribeButton(mapOnSubscribe(channel));
             } else {
                 if (DEBUG) {
                     Log.d(TAG, "Found subscription to this channel!");
@@ -451,8 +450,6 @@ public class ChannelFragment extends BaseStateFragment<ChannelInfo>
         tabAdapter.clearAllItems();
 
         if (currentInfo != null && !channelContentNotSupported) {
-            tabAdapter.addFragment(new ChannelVideosFragment(currentInfo), "Videos");
-
             final Context context = requireContext();
             final SharedPreferences preferences = PreferenceManager
                     .getDefaultSharedPreferences(context);
@@ -460,8 +457,10 @@ public class ChannelFragment extends BaseStateFragment<ChannelInfo>
             for (final ListLinkHandler linkHandler : currentInfo.getTabs()) {
                 final String tab = linkHandler.getContentFilters().get(0);
                 if (ChannelTabHelper.showChannelTab(context, preferences, tab)) {
-                    tabAdapter.addFragment(
-                            ChannelTabFragment.getInstance(serviceId, linkHandler, name),
+                    final ChannelTabFragment channelTabFragment =
+                            ChannelTabFragment.getInstance(serviceId, linkHandler, name);
+                    channelTabFragment.useAsFrontPage(useAsFrontPage);
+                    tabAdapter.addFragment(channelTabFragment,
                             context.getString(ChannelTabHelper.getTranslationKey(tab)));
                 }
             }
