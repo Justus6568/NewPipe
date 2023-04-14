@@ -48,7 +48,7 @@ class NotificationHelper(val context: Context) {
         )
             .setContentTitle(Localization.concatenateStrings(data.name, summary))
             .setContentText(
-                data.listInfo.relatedItems.joinToString(
+                data.streams.joinToString(
                     context.getString(R.string.enumeration_comma)
                 ) { x -> x.name }
             )
@@ -74,7 +74,7 @@ class NotificationHelper(val context: Context) {
                 context,
                 data.pseudoId,
                 NavigationHelper
-                    .getChannelIntent(context, data.listInfo.serviceId, data.listInfo.url)
+                    .getChannelIntent(context, data.originalInfo.serviceId, data.originalInfo.url)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                 0
             )
