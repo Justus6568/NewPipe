@@ -93,13 +93,7 @@ class FeedLoadService : Service() {
             .doOnSubscribe {
                 startForeground(NOTIFICATION_ID, notificationBuilder.build())
             }
-            .subscribe { _, error ->
-                // There seems to be a bug in the kotlin plugin as it tells you when
-                // building that this can't be null:
-                // "Condition 'error != null' is always 'true'"
-                // However it can indeed be null
-                // The suppression may be removed in further versions
-                @Suppress("SENSELESS_COMPARISON")
+            .subscribe { _, error: Throwable? ->
                 if (error != null) {
                     Log.e(TAG, "Error while storing result", error)
                     handleError(error)
