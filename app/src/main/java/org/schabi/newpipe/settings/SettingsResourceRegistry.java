@@ -43,6 +43,7 @@ public final class SettingsResourceRegistry {
         add(SponsorBlockSettingsFragment.class, R.xml.sponsor_block_settings);
         add(SponsorBlockCategoriesSettingsFragment.class, R.xml.sponsor_block_category_settings);
         add(ExtraSettingsFragment.class, R.xml.extra_settings);
+        add(ExoPlayerSettingsFragment.class, R.xml.exoplayer_settings);
     }
 
     private SettingRegistryEntry add(

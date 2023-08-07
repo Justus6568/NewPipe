@@ -60,6 +60,7 @@ import org.schabi.newpipe.database.feed.model.FeedGroupEntity
 import org.schabi.newpipe.database.subscription.SubscriptionEntity
 import org.schabi.newpipe.databinding.FragmentFeedBinding
 import org.schabi.newpipe.error.ErrorInfo
+import org.schabi.newpipe.error.ErrorUtil
 import org.schabi.newpipe.error.UserAction
 import org.schabi.newpipe.extractor.exceptions.AccountTerminatedException
 import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException
@@ -231,7 +232,6 @@ class FeedFragment : BaseStateFragment<FeedState>() {
                     }
                 }
                 .setPositiveButton(resources.getString(R.string.ok), null)
-                .create()
                 .show()
             return true
         } else if (item.itemId == R.id.menu_item_feed_toggle_played_items) {
@@ -254,22 +254,18 @@ class FeedFragment : BaseStateFragment<FeedState>() {
             viewModel.getShowFutureItemsFromPreferences()
         )
 
-        val builder = AlertDialog.Builder(context!!)
-        builder.setTitle(R.string.feed_hide_streams_title)
-        builder.setMultiChoiceItems(dialogItems, checkedDialogItems) { _, which, isChecked ->
-            checkedDialogItems[which] = isChecked
-        }
-
-        builder.setPositiveButton(R.string.ok) { _, _ ->
-            viewModel.setSaveShowPlayedItems(checkedDialogItems[0])
-
-            viewModel.setSaveShowPartiallyPlayedItems(checkedDialogItems[1])
-
-            viewModel.setSaveShowFutureItems(checkedDialogItems[2])
-        }
-        builder.setNegativeButton(R.string.cancel, null)
-
-        builder.create().show()
+        AlertDialog.Builder(context!!)
+            .setTitle(R.string.feed_hide_streams_title)
+            .setMultiChoiceItems(dialogItems, checkedDialogItems) { _, which, isChecked ->
+                checkedDialogItems[which] = isChecked
+            }
+            .setPositiveButton(R.string.ok) { _, _ ->
+                viewModel.setSaveShowPlayedItems(checkedDialogItems[0])
+                viewModel.setSaveShowPartiallyPlayedItems(checkedDialogItems[1])
+                viewModel.setSaveShowFutureItems(checkedDialogItems[2])
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     override fun onDestroyOptionsMenu() {
@@ -458,23 +454,32 @@ class FeedFragment : BaseStateFragment<FeedState>() {
             if (t is FeedLoadService.RequestException &&
                 t.cause is ContentNotAvailableException
             ) {
-                Single.fromCallable {
-                    NewPipeDatabase.getInstance(requireContext()).subscriptionDAO()
-                        .getSubscription(t.subscriptionId)
-                }.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        { subscriptionEntity ->
-                            handleFeedNotAvailable(
-                                subscriptionEntity,
-                                t.cause,
-                                errors.subList(i + 1, errors.size)
-                            )
-                        },
-                        { throwable -> Log.e(TAG, "Unable to process", throwable) }
-                    )
-                return // this will be called on the remaining errors by handleFeedNotAvailable()
+                disposables.add(
+                    Single.fromCallable {
+                        NewPipeDatabase.getInstance(requireContext()).subscriptionDAO()
+                            .getSubscription(t.subscriptionId)
+                    }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            { subscriptionEntity ->
+                                handleFeedNotAvailable(
+                                    subscriptionEntity,
+                                    t.cause,
+                                    errors.subList(i + 1, errors.size)
+                                )
+                            },
+                            { throwable -> Log.e(TAG, "Unable to process", throwable) }
+                        )
+                )
+                // this will be called on the remaining errors by handleFeedNotAvailable()
+                return@handleItemsErrors
             }
+        }
+
+        if (errors.isNotEmpty()) {
+            // if no error was a ContentNotAvailableException, show a general error snackbar
+            ErrorUtil.showSnackbar(this, ErrorInfo(errors, UserAction.REQUESTED_FEED, ""))
         }
     }
 
@@ -490,15 +495,13 @@ class FeedFragment : BaseStateFragment<FeedState>() {
 
         val builder = AlertDialog.Builder(requireContext())
             .setTitle(R.string.feed_load_error)
-            .setPositiveButton(
-                R.string.unsubscribe
-            ) { _, _ ->
-                SubscriptionManager(requireContext()).deleteSubscription(
-                    subscriptionEntity.serviceId, subscriptionEntity.url
-                ).subscribe()
+            .setPositiveButton(R.string.unsubscribe) { _, _ ->
+                SubscriptionManager(requireContext())
+                    .deleteSubscription(subscriptionEntity.serviceId, subscriptionEntity.url)
+                    .subscribe()
                 handleItemsErrors(nextItemsErrors)
             }
-            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .setNegativeButton(R.string.cancel, null)
 
         var message = getString(R.string.feed_load_error_account_info, subscriptionEntity.name)
         if (cause is AccountTerminatedException) {
@@ -515,7 +518,8 @@ class FeedFragment : BaseStateFragment<FeedState>() {
                 message += "\n" + cause.message
             }
         }
-        builder.setMessage(message).create().show()
+        builder.setMessage(message)
+            .show()
     }
 
     private fun updateRelativeTimeViews() {

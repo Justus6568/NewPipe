@@ -229,7 +229,6 @@
     <string name="show_memory_leaks_key">show_memory_leaks_key</string>
     <string name="allow_disposed_exceptions_key">allow_disposed_exceptions_key</string>
     <string name="show_original_time_ago_key">show_original_time_ago_key</string>
-    <string name="disable_media_tunneling_key">disable_media_tunneling_key</string>
     <string name="show_image_indicators_key">show_image_indicators_key</string>
     <string name="show_crash_the_player_key">show_crash_the_player_key</string>
     <string name="check_new_streams_key">check_new_streams</string>
@@ -271,27 +270,36 @@
     <string name="caption_settings_key">caption_settings_key</string>
     <string name="caption_user_set_key">caption_user_set_key</string>
 
+    <!-- Main-Tabs Position -->
+    <string name="main_tabs_position_key">main_tabs_position</string>
+
     <!-- Content & History -->
     <string name="show_channel_tabs_key">channel_tabs</string>
-    <string name="show_channel_tabs_playlists">show_channel_tabs_playlists</string>
-    <string name="show_channel_tabs_livestreams">show_channel_tabs_live</string>
+    <string name="show_channel_tabs_videos">show_channel_tabs_videos</string>
+    <string name="show_channel_tabs_tracks">show_channel_tabs_tracks</string>
     <string name="show_channel_tabs_shorts">show_channel_tabs_shorts</string>
+    <string name="show_channel_tabs_livestreams">show_channel_tabs_livestreams</string>
     <string name="show_channel_tabs_channels">show_channel_tabs_channels</string>
+    <string name="show_channel_tabs_playlists">show_channel_tabs_playlists</string>
     <string name="show_channel_tabs_albums">show_channel_tabs_albums</string>
     <string name="show_channel_tabs_about">show_channel_tabs_about</string>
     <string-array name="show_channel_tabs_value_list">
-        <item>@string/show_channel_tabs_playlists</item>
-        <item>@string/show_channel_tabs_livestreams</item>
+        <item>@string/show_channel_tabs_videos</item>
+        <item>@string/show_channel_tabs_tracks</item>
         <item>@string/show_channel_tabs_shorts</item>
+        <item>@string/show_channel_tabs_livestreams</item>
         <item>@string/show_channel_tabs_channels</item>
+        <item>@string/show_channel_tabs_playlists</item>
         <item>@string/show_channel_tabs_albums</item>
         <item>@string/show_channel_tabs_about</item>
     </string-array>
     <string-array name="show_channel_tabs_description_list">
-        <item>@string/channel_tab_playlists</item>
-        <item>@string/channel_tab_livestreams</item>
+        <item>@string/channel_tab_videos</item>
+        <item>@string/channel_tab_tracks</item>
         <item>@string/channel_tab_shorts</item>
+        <item>@string/channel_tab_livestreams</item>
         <item>@string/channel_tab_channels</item>
+        <item>@string/channel_tab_playlists</item>
         <item>@string/channel_tab_albums</item>
         <item>@string/channel_tab_about</item>
     </string-array>
@@ -363,6 +371,24 @@
         <item>86400</item>
     </string-array>
     <string name="feed_use_dedicated_fetch_method_key">feed_use_dedicated_fetch_method</string>
+
+    <string name="feed_fetch_channel_tabs_key">feed_fetch_channel_tabs</string>
+    <string name="fetch_channel_tabs_videos">fetch_channel_tabs_videos</string>
+    <string name="fetch_channel_tabs_tracks">fetch_channel_tabs_tracks</string>
+    <string name="fetch_channel_tabs_shorts">fetch_channel_tabs_shorts</string>
+    <string name="fetch_channel_tabs_livestreams">fetch_channel_tabs_livestreams</string>
+    <string-array name="feed_fetch_channel_tabs_value_list">
+        <item>@string/fetch_channel_tabs_videos</item>
+        <item>@string/fetch_channel_tabs_tracks</item>
+        <item>@string/fetch_channel_tabs_shorts</item>
+        <item>@string/fetch_channel_tabs_livestreams</item>
+    </string-array>
+    <string-array name="feed_fetch_channel_tabs_description_list">
+        <item>@string/channel_tab_videos</item>
+        <item>@string/channel_tab_tracks</item>
+        <item>@string/channel_tab_shorts</item>
+        <item>@string/channel_tab_livestreams</item>
+    </string-array>
 
     <string name="import_export_data_path">import_export_data_path</string>
     <string name="import_data">import_data</string>
@@ -527,6 +553,7 @@
         <item>lt</item>
         <item>hu</item>
         <item>nl</item>
+        <item>nqo</item>
         <item>no</item>
         <item>nn</item>
         <item>uz</item>
@@ -577,6 +604,7 @@
         <item>zh-TW</item>
         <item>zh-HK</item>
         <item>ja</item>
+        <item>ryu</item>
         <item>ko</item>
     </string-array>
     <string-array name="language_names">
@@ -607,6 +635,7 @@
         <item>Lietuvių</item>
         <item>Magyar</item>
         <item>Nederlands</item>
+        <item>ߒߞߏ</item>
         <item>Norsk</item>
         <item>Nynorsk</item>
         <item>O‘zbek</item>
@@ -657,6 +686,7 @@
         <item>中文 (繁體)</item>
         <item>中文 (香港)</item>
         <item>日本語</item>
+        <item>うちなーぐち</item>
         <item>한국어</item>
     </string-array>
 
@@ -1217,6 +1247,7 @@
         <item>ne</item>
         <item>nl</item>
         <item>nl-be</item>
+        <item>nqo</item>
         <item>oc</item>
         <item>or</item>
         <item>pa</item>
@@ -1226,6 +1257,7 @@
         <item>pt-pt</item>
         <item>ro</item>
         <item>ru</item>
+        <item>ryu</item>
         <item>sat</item>
         <item>sc</item>
         <item>sk</item>
@@ -1286,6 +1318,7 @@
         <item>Íslenska</item>
         <item>Italiano</item>
         <item>日本語</item>
+        <item>うちなーぐち</item>
         <item>ꦧꦱꦗꦮ</item>
         <item>Taqbaylit</item>
         <item>Kurmancî</item>
@@ -1300,6 +1333,7 @@
         <item>Nनेपाली</item>
         <item>Nederlands (NL)</item>
         <item>Nederlands (BE)</item>
+        <item>ߒߞߏ</item>
         <item>Occitan</item>
         <item>ଓଡ଼ିଆ</item>
         <item>ਪੰਜਾਬੀ</item>
@@ -1424,4 +1458,12 @@
     </string-array>
     <string name="streams_notifications_channels_key">streams_notifications_channels</string>
     <string name="player_notification_screen_key">player_notification_screen</string>
+
+    <!-- ExoPlayer settings -->
+    <string name="exoplayer_settings_key">exoplayer_settings_key</string>
+    <string name="disable_media_tunneling_key">disable_media_tunneling_key</string>
+    <string name="disabled_media_tunneling_automatically_key">disabled_media_tunneling_automatically_key</string>
+    <string name="media_tunneling_device_blacklist_version">media_tunneling_device_blacklist_version</string>
+    <string name="use_exoplayer_decoder_fallback_key">use_exoplayer_decoder_fallback_key</string>
+    <string name="always_use_exoplayer_set_output_surface_workaround_key">always_use_exoplayer_set_output_surface_workaround_key</string>
 </resources>

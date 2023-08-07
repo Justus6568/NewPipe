@@ -109,7 +109,7 @@ public class DownloadDialog extends DialogFragment
     @State
     AudioTracksWrapper wrappedAudioTracks;
     @State
-    int selectedAudioStreamIndex;
+    int selectedAudioTrackIndex;
     @State
     int selectedVideoIndex; // set in the constructor
     @State
@@ -181,7 +181,7 @@ public class DownloadDialog extends DialogFragment
         final List<List<AudioStream>> groupedAudioStreams =
                 ListHelper.getGroupedAudioStreams(context, audioStreams);
         this.wrappedAudioTracks = new AudioTracksWrapper(groupedAudioStreams, context);
-        this.selectedAudioStreamIndex =
+        this.selectedAudioTrackIndex =
                 ListHelper.getDefaultAudioTrackGroup(context, groupedAudioStreams);
 
         // TODO: Adapt this code when the downloader support other types of stream deliveries
@@ -325,6 +325,7 @@ public class DownloadDialog extends DialogFragment
         selectedSubtitleIndex = getSubtitleIndexBy(subtitleStreamsAdapter.getAll());
 
         dialogBinding.qualitySpinner.setOnItemSelectedListener(this);
+        dialogBinding.audioStreamSpinner.setOnItemSelectedListener(this);
         dialogBinding.audioTrackSpinner.setOnItemSelectedListener(this);
         dialogBinding.videoAudioGroup.setOnCheckedChangeListener(this);
 
@@ -447,7 +448,7 @@ public class DownloadDialog extends DialogFragment
         }
 
         dialogBinding.audioTrackSpinner.setAdapter(audioTrackAdapter);
-        dialogBinding.audioTrackSpinner.setSelection(selectedAudioStreamIndex);
+        dialogBinding.audioTrackSpinner.setSelection(selectedAudioTrackIndex);
     }
 
     private void setupAudioSpinner() {
@@ -462,7 +463,7 @@ public class DownloadDialog extends DialogFragment
         dialogBinding.audioStreamSpinner.setVisibility(View.VISIBLE);
         dialogBinding.audioTrackSpinner.setVisibility(
                 wrappedAudioTracks.size() > 1 ? View.VISIBLE : View.GONE);
-        dialogBinding.defaultAudioTrackPresentText.setVisibility(View.GONE);
+        dialogBinding.audioTrackPresentInVideoText.setVisibility(View.GONE);
     }
 
     private void setupVideoSpinner() {
@@ -483,10 +484,8 @@ public class DownloadDialog extends DialogFragment
 
         dialogBinding.audioTrackSpinner.setVisibility(
                 isVideoOnly && wrappedAudioTracks.size() > 1 ? View.VISIBLE : View.GONE);
-        dialogBinding.defaultAudioTrackPresentText.setVisibility(
-                !isVideoOnly && wrappedAudioTracks.size() > 1 ? View.VISIBLE : View.GONE
-
-        );
+        dialogBinding.audioTrackPresentInVideoText.setVisibility(
+                !isVideoOnly && wrappedAudioTracks.size() > 1 ? View.VISIBLE : View.GONE);
     }
 
     private void setupSubtitleSpinner() {
@@ -500,7 +499,7 @@ public class DownloadDialog extends DialogFragment
         setRadioButtonsState(true);
         dialogBinding.audioStreamSpinner.setVisibility(View.GONE);
         dialogBinding.audioTrackSpinner.setVisibility(View.GONE);
-        dialogBinding.defaultAudioTrackPresentText.setVisibility(View.GONE);
+        dialogBinding.audioTrackPresentInVideoText.setVisibility(View.GONE);
     }
 
 
@@ -633,8 +632,8 @@ public class DownloadDialog extends DialogFragment
                 onItemSelectedSetFileName();
                 break;
             case R.id.audio_track_spinner:
-                final boolean trackChanged = selectedAudioStreamIndex != position;
-                selectedAudioStreamIndex = position;
+                final boolean trackChanged = selectedAudioTrackIndex != position;
+                selectedAudioTrackIndex = position;
                 if (trackChanged) {
                     updateSecondaryStreams();
                     fetchStreamsSize();
@@ -740,10 +739,10 @@ public class DownloadDialog extends DialogFragment
     }
 
     private StreamSizeWrapper<AudioStream> getWrappedAudioStreams() {
-        if (selectedAudioStreamIndex < 0 || selectedAudioStreamIndex > wrappedAudioTracks.size()) {
+        if (selectedAudioTrackIndex < 0 || selectedAudioTrackIndex > wrappedAudioTracks.size()) {
             return StreamSizeWrapper.empty();
         }
-        return wrappedAudioTracks.getTracksList().get(selectedAudioStreamIndex);
+        return wrappedAudioTracks.getTracksList().get(selectedAudioTrackIndex);
     }
 
     private int getSubtitleIndexBy(@NonNull final List<SubtitlesStream> streams) {
@@ -786,7 +785,6 @@ public class DownloadDialog extends DialogFragment
                 .setTitle(R.string.general_error)
                 .setMessage(msg)
                 .setNegativeButton(getString(R.string.ok), null)
-                .create()
                 .show();
     }
 
@@ -999,7 +997,7 @@ public class DownloadDialog extends DialogFragment
                     break;
             }
 
-            askDialog.create().show();
+            askDialog.show();
             return;
         }
 
@@ -1043,7 +1041,7 @@ public class DownloadDialog extends DialogFragment
             }
         });
 
-        askDialog.create().show();
+        askDialog.show();
     }
 
     private void continueSelectedDownload(@NonNull final StoredFileHelper storage) {
