@@ -1,3 +1,5 @@
+## This fork is no longer maintained. Use [Tubular](https://github.com/polymorphicshade/Tubular) instead.
+
 # NewPipe x SponsorBlock x Return YouTube Dislike
 A fork of [NewPipe SponsorBlock](https://github.com/polymorphicshade/NewPipe) with some extra functionality.
 
